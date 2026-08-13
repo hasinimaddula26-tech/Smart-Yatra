@@ -10,7 +10,7 @@ interface Message {
 
 const INITIAL_MESSAGE: Message = {
     id: 'init',
-    text: "Hello! I'm the Smart Yatra AI Assistant. \n\nI can help you with:\n• Bus timings & Routes\n• Finding alternatives\n• Reporting issues\n\nHow can I help you today?",
+    text: "Hello! I'm the Smart Yatra AI Assistant. \n\nI can help you with:\n• Bus timings & Routes\n• Pragati College Buses\n• Finding alternatives\n• Reporting issues\n\nHow can I help you today?",
     isUser: false,
     timestamp: new Date()
 };
@@ -45,20 +45,90 @@ export default function Chatbot() {
         setInput('');
         setLoading(true);
 
-        // Simulate Gemini API Call (Replace with real API call if key is available)
-        // We use a simulation here for stability during the hackathon demo
+        // Smart Simulated Intelligence
         setTimeout(() => {
-            let responseText = "I can help with that. Please check the 'Live Bus' tab for real-time tracking.";
-
+            let responseText = "I'm here to help with your journey. Could you specify?";
             const lowerInput = userMsg.text.toLowerCase();
-            if (lowerInput.includes('bus') && (lowerInput.includes('late') || lowerInput.includes('where'))) {
-                responseText = "Bus **AP 39 Z 1234** is currently on time. It is near **Madhavpatnam** and will reach college in **15 mins**.";
-            } else if (lowerInput.includes('ticket') || lowerInput.includes('pass')) {
-                responseText = "You can renew your bus pass in the **College Bus** section. Your current pass is valid until **Dec 31, 2024**.";
-            } else if (lowerInput.includes('complaint') || lowerInput.includes('report')) {
-                responseText = "I can help you file a complaint. Please navigate to the **Complaints** page or tell me the issue here.";
-            } else if (lowerInput.includes('hello') || lowerInput.includes('hi')) {
-                responseText = "Hello! How can I assist your journey to Pragati Engineering College today?";
+
+            // KNOWLEDGE BASE SIMULATION
+
+            // 1. GREETINGS & INTRO
+            if (lowerInput.match(/\b(hi|hello|hey|greetings|namaste|start|who are you)\b/)) {
+                responseText = "Namaste! 🙏 I am your Smart Yatra AI Assistant. I can help you track buses, report issues, find alternative transport, and keep you safe. How can I assist you today?";
+            }
+
+            // 2. BUS STATUS & LIVE TRACKING
+            else if (lowerInput.match(/\b(track|where|live|location|gps|status|arrive|schedule|late|delay)\b/) && lowerInput.match(/\b(bus|transport)\b/)) {
+                responseText = "📍 **Live Tracking**: You can view real-time GPS locations of all active buses on the **State Bus** or **College Bus** pages.\nExpected arriving buses near you show their ETA and current capacity. Would you like me to guide you there?";
+            }
+            else if (lowerInput.match(/\b(ap 39|bus 1234|bus 9012)\b/)) {
+                responseText = "Real-time Update: Bus **AP 39 Z 1234** is On Time. It's currently at **Madhavpatnam Junction** and will arrive in **12 mins**. Crowd level is **Moderate**.";
+            }
+
+            // 3. SAFETY, SOS & EMERGENCIES
+            else if (lowerInput.match(/\b(safe|sos|help|police|danger|scared|emergency|accident|harassment)\b/)) {
+                responseText = "🚨 **EMERGENCY ASSISTANCE**: Your safety is our priority.\n1. Tap the RED **SOS Button** on the top or bottom right immediately.\n2. It alerts nearby police stations and sends your live GPS coordinates.\n3. Can I dial **100** or the **Women's Helpline (181)** for you right now?";
+            }
+
+            // 4. TICKETS, PASSES & FARES
+            else if (lowerInput.match(/\b(ticket|pass|renew|cost|price|fare|pay|buy|qr)\b/)) {
+                responseText = "🎫 **Tickets & Passes**:\n• You can securely renew or buy a Monthly/Weekly Bus Pass in the **Bus Pass** section.\n• Each pass has an encrypted **IoT Signature** (QR code) for easy scanning when you board.";
+            }
+
+            // 5. COMPLAINTS & GRIEVANCES
+            else if (lowerInput.match(/\b(complaint|report|driver|rash|rude|misbehave|dirty|issue|broken)\b/)) {
+                responseText = "I'm sorry you are experiencing this. We have zero tolerance for misconduct or poor service.\n\n📝 Please file a formal report in the **Complaints** tab. You can instantly send it to the **RTC Authority**, **Traffic Police**, or **Transport Ministry**. Action will be taken within 24 hours.";
+            }
+
+            // 6. CROWD PREDICTION & RUSH
+            else if (lowerInput.match(/\b(crowd|rush|full|empty|seat|stand|space)\b/)) {
+                responseText = "You can view live passenger counts on the map!\n\n💡 **Smart Insight**: Morning buses (8:00 AM - 9:30 AM) are usually 90% full. If you tap on any bus marker on the map, it will tell you exactly how many seats are left.";
+            }
+
+            // 7. MULTIMODAL ALTERNATIVES (TRAINS/FLIGHTS)
+            else if (lowerInput.match(/\b(train|flight|cab|auto|alternative|booking|far|long distance)\b/)) {
+                responseText = "We offer seamless multimodal connectivity!\n\n🚆 **Trains**: Check live IRCTC statuses.\n✈️ **Flights**: Compare local airport departures.\n\nVisit the **Trains & Flights** page from the Navigation Menu to explore alternatives if your bus is delayed.";
+            }
+
+            // 8. GOVERNMENT SCHEMES & NORMS
+            else if (lowerInput.match(/\b(scheme|government|govt|free|mahila|rules|norms|guidelines|sthri|shakti)\b/)) {
+                responseText = "📜 **Norms & Schemes**: Under initiatives like **Sthri Shakti**, the government provides priority seating, subsidized passes, and enhanced CCTV security for women.\n\nYou can read all the passenger rights and safety protocols in the **Norms** page.";
+            }
+
+            // 9. PRAGATI ENGINEERING COLLEGE - GENERAL
+            else if (lowerInput.match(/\b(pragati|college|engineering|student|campus)\b/)) {
+                responseText = "🎓 **Pragati Engineering College** Bus Service:\n\n📍 **3 Main Routes Active:**\n• Route 1: Kakinada Main (08:45 AM)\n• Route 2: Samalkot (08:50 AM)\n• Route 3: Rajahmundry (08:30 AM)\n\nCheck the **College Bus** page to track them live!";
+            }
+
+            // 10. SPECIFIC COLLEGE ROUTES
+            else if (lowerInput.match(/\b(kakinada|route 1|jaggannaickpur|main road|bhanugudi|madhavpatnam)\b/)) {
+                responseText = "🚌 **Route 1: Kakinada Main (Pragati College)**\n\n📍 Stops: Jaggannaickpur → Main Road → Bhanugudi → Madhavpatnam\n⏰ ETA: **08:45 AM**\nStatus: Running smoothly today!";
+            }
+            else if (lowerInput.match(/\b(samalkot|route 2|railway station|bus stand|peddapuram)\b/)) {
+                responseText = "🚌 **Route 2: Samalkot (Pragati College)**\n\n📍 Stops: Railway Station → Bus Stand → Peddapuram Road\n⏰ ETA: **08:50 AM**\nTrack it live on the College Bus map.";
+            }
+            else if (lowerInput.match(/\b(rajahmundry|route 3|kambala|lala|rajanagaram)\b/)) {
+                responseText = "🚌 **Route 3: Rajahmundry (Pragati College)**\n\n📍 Stops: Kambala Cheruvu → Lala Cheruvu → Rajanagaram\n⏰ ETA: **08:30 AM** (Earliest arrival).";
+            }
+
+            // 11. COLLEGE PASS & ID SCANNING
+            else if (lowerInput.match(/\b(scan|student pass|college pass|id|verification|verify)\b/)) {
+                responseText = "🎫 **Student Bus Pass Verification:**\nYour IoT Student ID is securely synced. Just tap your ID card on the **IoT Signature Grid** scanner inside the **College Bus** dashboard to verify your boarding instantly.";
+            }
+
+            // 12. LOST AND FOUND
+            else if (lowerInput.match(/\b(lost|found|missed|forget|forgot|bag|phone|wallet|item)\b/)) {
+                responseText = "🎒 **Lost & Found**:\nDid you leave something behind? Don't worry!\n1. Submit a ticket in the **Complaints** section.\n2. Select 'Lost & Found' or mention it in the description.\n3. Include your Bus Number and Route. The depot manager will contact you if it's found.";
+            }
+
+            // 13. APP FEATURES & NAVIGATION
+            else if (lowerInput.match(/\b(app|features|what can you do|how to use|dashboard)\b/)) {
+                responseText = "📱 **Smart Yatra Features**:\n- **State Bus**: Live tracking of public buses.\n- **College Bus**: Track Pragati institution buses.\n- **Complaints**: Direct grievance reporting to authorities.\n- **Bus Pass**: Digital IoT pass generation.\n- **SOS**: One-tap emergency broadcast.";
+            }
+
+            // FALLBACK - HELPFUL REDIRECTION
+            else {
+                responseText = "I'm still learning about that! You can try asking about:\n• Live Bus Routes\n• Emergency SOS\n• Complaints System\n• Bus Passes or Train tickets\n• Lost & Found.";
             }
 
             const botMsg: Message = {
@@ -69,7 +139,7 @@ export default function Chatbot() {
             };
             setMessages(prev => [...prev, botMsg]);
             setLoading(false);
-        }, 1500);
+        }, 1200);
     };
 
     return (
@@ -117,8 +187,8 @@ export default function Chatbot() {
                                 )}
                                 <div
                                     className={`max-w-[75%] p-3 rounded-2xl text-sm leading-relaxed shadow-sm ${msg.isUser
-                                            ? 'bg-teal-600 text-white rounded-tr-none'
-                                            : 'bg-white text-gray-700 border border-gray-200 rounded-tl-none'
+                                        ? 'bg-teal-600 text-white rounded-tr-none'
+                                        : 'bg-white text-gray-700 border border-gray-200 rounded-tl-none'
                                         }`}
                                 >
                                     <p className="whitespace-pre-line">{msg.text}</p>

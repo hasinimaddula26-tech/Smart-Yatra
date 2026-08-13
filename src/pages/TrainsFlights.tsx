@@ -1,6 +1,9 @@
 import { useState } from 'react';
 import Layout from '../components/Layout';
-import { Train, Plane, Calendar, ArrowRight, User } from 'lucide-react';
+import { Train, Plane, Calendar, MapPin, ArrowRight, Info } from 'lucide-react';
+import { useLanguage } from '../contexts/LanguageContext';
+import { motion, AnimatePresence } from 'framer-motion';
+import trainsBg from '../assets/trains_bg.png';
 
 const TRAINS = [
     { id: 't1', name: 'Guntur Intercity Express', number: '12739', type: '2S', from: 'Vijayawada', to: 'Guntur', dep: '06:15 AM', arr: '07:00 AM', duration: '45 min', seats: 120, status: 'On Time', price: 55 },
@@ -12,107 +15,199 @@ const TRAINS = [
 ];
 
 export default function TrainsFlights() {
+    const { t } = useLanguage();
     const [activeTab, setActiveTab] = useState<'trains' | 'flights'>('trains');
+    const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0]);
+
+
+    const handleToday = () => setSelectedDate(new Date().toISOString().split('T')[0]);
+    const handleTomorrow = () => {
+        const tomorrow = new Date();
+        tomorrow.setDate(tomorrow.getDate() + 1);
+        setSelectedDate(tomorrow.toISOString().split('T')[0]);
+    };
 
     return (
         <Layout>
-            <div className="max-w-5xl mx-auto pb-12">
-                <div className="text-center mb-10">
-                    <h1 className="text-3xl font-extrabold text-gray-900 mb-2">Trains & Flights</h1>
-                    <p className="text-gray-500">Book trains and flights for your journey</p>
-                </div>
+            <div
+                className="min-h-screen -mt-20 pt-32 pb-20 px-6 relative overflow-hidden"
+                style={{
+                    backgroundImage: `url(${trainsBg})`,
+                    backgroundSize: 'cover',
+                    backgroundPosition: 'center',
+                    backgroundAttachment: 'fixed'
+                }}
+            >
+                <div className="absolute inset-0 bg-gradient-to-b from-slate-900/60 via-slate-900/40 to-slate-900/80 backdrop-blur-[2px]"></div>
 
-                {/* Date Picker Section */}
-                <div className="bg-white p-4 rounded-xl shadow-sm border border-gray-100 flex flex-col md:flex-row items-center justify-between gap-4 mb-8">
-                    <div className="flex items-center gap-4">
-                        <Calendar className="text-primary w-5 h-5" />
-                        <span className="font-bold text-gray-700">Travel Date:</span>
-                    </div>
-                    <div className="flex gap-2">
-                        <button className="px-4 py-2 bg-primary/10 text-primary font-bold rounded-lg border border-primary/20">Today</button>
-                        <button className="px-4 py-2 bg-gray-50 text-gray-600 font-bold rounded-lg border border-gray-200 hover:bg-gray-100">Tomorrow</button>
-                        <button className="px-4 py-2 bg-gray-50 text-gray-600 font-bold rounded-lg border border-gray-200 hover:bg-gray-100">Choose Date</button>
-                    </div>
-                </div>
-
-                {/* Tabs */}
-                <div className="flex mb-8 bg-gray-100 p-1 rounded-xl w-full md:w-fit mx-auto">
-                    <button
-                        onClick={() => setActiveTab('trains')}
-                        className={`px-8 py-3 rounded-lg font-bold text-sm transition-all flex items-center ${activeTab === 'trains' ? 'bg-white shadow-sm text-primary' : 'text-gray-500 hover:text-gray-700'}`}
+                <div className="max-w-[1400px] mx-auto relative z-10">
+                    {/* Header Section */}
+                    <motion.div
+                        initial={{ opacity: 0, y: -20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className="mb-12 flex flex-col md:flex-row justify-between items-end gap-10"
                     >
-                        <Train className="w-4 h-4 mr-2" /> Trains
-                    </button>
-                    <button
-                        onClick={() => setActiveTab('flights')}
-                        className={`px-8 py-3 rounded-lg font-bold text-sm transition-all flex items-center ${activeTab === 'flights' ? 'bg-white shadow-sm text-primary' : 'text-gray-500 hover:text-gray-700'}`}
-                    >
-                        <Plane className="w-4 h-4 mr-2" /> Flights
-                    </button>
-                </div>
-
-                {/* Content */}
-                {activeTab === 'trains' ? (
-                    <div className="space-y-4">
-                        <div className="flex justify-between items-center mb-4 px-2">
-                            <h2 className="font-bold text-gray-900">Available Trains</h2>
-                            <span className="text-xs text-green-600 font-bold bg-green-50 px-2 py-1 rounded">6 trains available for today</span>
+                        <div>
+                            <h1 className="text-6xl font-black text-white italic uppercase tracking-tighter mb-2 drop-shadow-2xl">
+                                {t.trains.title}
+                            </h1>
+                            <p className="text-sm font-bold text-gray-300 uppercase tracking-[0.4em] drop-shadow-md">
+                                {t.trains.intelligenceHub}
+                            </p>
                         </div>
+                        <div className="flex bg-white/5 backdrop-blur-xl p-2 rounded-[2.5rem] border border-white/10 shadow-2xl">
+                            <button
+                                onClick={() => setActiveTab('trains')}
+                                className={`px-12 py-5 rounded-[2rem] font-black uppercase tracking-[0.3em] text-[11px] transition-all flex items-center gap-4 ${activeTab === 'trains' ? 'bg-white text-gray-900 shadow-2xl' : 'text-gray-400 hover:text-white'}`}
+                            >
+                                <Train className="w-5 h-5" /> {t.trains.trainsTab}
+                            </button>
+                            <button
+                                onClick={() => setActiveTab('flights')}
+                                className={`px-12 py-5 rounded-[2rem] font-black uppercase tracking-[0.3em] text-[11px] transition-all flex items-center gap-4 ${activeTab === 'flights' ? 'bg-white text-gray-900 shadow-2xl' : 'text-gray-400 hover:text-white'}`}
+                            >
+                                <Plane className="w-5 h-5" /> {t.trains.flightsTab}
+                            </button>
+                        </div>
+                    </motion.div>
 
-                        {TRAINS.map(train => (
-                            <div key={train.id} className="bg-white rounded-xl p-6 shadow-card border border-gray-100 hover:shadow-lg transition-all group">
-                                <div className="flex flex-col md:flex-row justify-between items-center gap-6">
-                                    {/* Left: Info */}
-                                    <div className="flex-1 w-full">
-                                        <div className="flex justify-between mb-2">
-                                            <h3 className="font-bold text-lg text-gray-900">{train.name}</h3>
-                                            <span className="bg-gray-100 text-gray-600 text-xs font-bold px-2 py-1 rounded">{train.number}</span>
-                                        </div>
-                                        <div className="flex items-center justify-between text-sm text-gray-500 mb-4">
-                                            <div>
-                                                <p className="font-bold text-gray-900 text-lg">{train.dep}</p>
-                                                <p className="text-xs">{train.from}</p>
-                                            </div>
-                                            <div className="flex flex-col items-center px-4">
-                                                <span className="text-xs text-gray-400 mb-1">{train.duration}</span>
-                                                <div className="w-20 h-[1px] bg-gray-300 relative">
-                                                    <div className="absolute -right-1 -top-1 w-2 h-2 rounded-full bg-gray-300"></div>
-                                                    <div className="absolute -left-1 -top-1 w-2 h-2 rounded-full bg-gray-300"></div>
-                                                </div>
-                                            </div>
-                                            <div className="text-right">
-                                                <p className="font-bold text-gray-900 text-lg">{train.arr}</p>
-                                                <p className="text-xs">{train.to}</p>
-                                            </div>
-                                        </div>
-                                        <div className="flex gap-4 text-xs font-bold">
-                                            <span className="text-gray-500 bg-gray-50 px-2 py-1 rounded border border-gray-100">{train.type}</span>
-                                            <span className="text-green-600 bg-green-50 px-2 py-1 rounded border border-green-100">{train.seats} seats</span>
-                                            <span className={`${train.status === 'On Time' ? 'text-green-600' : 'text-red-500'}`}>{train.status}</span>
-                                        </div>
-                                    </div>
-
-                                    {/* Right: Price & Action */}
-                                    <div className="flex flex-row md:flex-col items-center justify-between w-full md:w-auto gap-4 pl-0 md:pl-6 md:border-l border-gray-100">
-                                        <div className="text-center">
-                                            <span className="text-2xl font-bold text-primary">₹{train.price}</span>
-                                            <p className="text-xs text-gray-400">per person</p>
-                                        </div>
-                                        <button className="bg-primary text-white px-6 py-2.5 rounded-lg font-bold text-sm shadow-lg shadow-primary/20 hover:bg-teal-700 transition-colors w-full md:w-auto">
-                                            Book Now
-                                        </button>
-                                    </div>
+                    {/* TOP SEARCH BAR ARRANGEMENT */}
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className="bg-white/10 backdrop-blur-3xl p-8 rounded-[4rem] border border-white/20 shadow-2xl mb-12 flex flex-col lg:flex-row items-center gap-10"
+                    >
+                        <div className="flex-1 flex flex-col md:flex-row items-center gap-8 w-full">
+                            <div className="flex-1 space-y-2 w-full">
+                                <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-4">{t.trains.dateLabel}</label>
+                                <div className="flex items-center gap-4 bg-white/5 p-4 rounded-[2rem] border border-white/10">
+                                    <Calendar className="w-6 h-6 text-primary ml-2" />
+                                    <input
+                                        type="date"
+                                        value={selectedDate}
+                                        onChange={(e) => setSelectedDate(e.target.value)}
+                                        className="bg-transparent text-white font-bold outline-none w-full"
+                                    />
                                 </div>
                             </div>
-                        ))}
-                    </div>
-                ) : (
-                    <div className="text-center py-20 bg-white rounded-xl border border-gray-100">
-                        <Plane className="w-16 h-16 text-gray-200 mx-auto mb-4" />
-                        <h3 className="text-xl font-bold text-gray-900">No Flights Available</h3>
-                        <p className="text-gray-500">There are no direct flights for this route today.</p>
-                    </div>
-                )}
+                            <div className="flex items-center gap-3 pt-6">
+                                <button onClick={handleToday} className={`px-8 py-4 rounded-2xl font-black text-[10px] uppercase tracking-widest transition-all ${selectedDate === new Date().toISOString().split('T')[0] ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'bg-white/5 text-gray-400 hover:bg-white/10'}`}>{t.trains.today}</button>
+                                <button onClick={handleTomorrow} className={`px-8 py-4 rounded-2xl font-black text-[10px] uppercase tracking-widest transition-all ${selectedDate === new Date(new Date().setDate(new Date().getDate() + 1)).toISOString().split('T')[0] ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'bg-white/5 text-gray-400 hover:bg-white/10'}`}>{t.trains.tomorrow}</button>
+                            </div>
+                        </div>
+                        <div className="h-20 w-[1px] bg-white/10 hidden lg:block"></div>
+                        <div className="flex items-center gap-6 pr-6">
+                            <div className="p-4 bg-amber-500/20 rounded-[1.5rem] border border-amber-500/30">
+                                <Info className="w-6 h-6 text-amber-500" />
+                            </div>
+                            <div className="max-w-[200px]">
+                                <p className="text-[10px] font-black text-white uppercase tracking-widest mb-1">{t.trains.advisory}</p>
+                                <p className="text-[9px] font-medium text-gray-400 leading-tight italic">{t.trains.advisoryDesc}</p>
+                            </div>
+                        </div>
+                    </motion.div>
+
+                    {/* Results Section */}
+                    <AnimatePresence mode="wait">
+                        {activeTab === 'trains' ? (
+                            <motion.div
+                                key="trains"
+                                initial={{ opacity: 0, y: 20 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                exit={{ opacity: 0, y: -20 }}
+                                className="grid grid-cols-1 gap-8"
+                            >
+                                {TRAINS.map((train) => (
+                                    <motion.div
+                                        key={train.id}
+                                        whileHover={{ y: -5, scale: 1.01 }}
+                                        className="bg-white/10 backdrop-blur-2xl p-10 rounded-[3.5rem] border border-white/10 shadow-2xl group overflow-hidden relative"
+                                    >
+                                        <div className="absolute top-0 right-0 p-10 opacity-5 group-hover:opacity-10 transition-opacity">
+                                            <Train className="w-40 h-40 text-white -rotate-12" />
+                                        </div>
+                                        <div className="flex flex-col lg:flex-row justify-between items-center gap-10 relative z-10">
+                                            <div className="flex-1 w-full space-y-10">
+                                                <div className="flex items-center justify-between">
+                                                    <div className="flex items-center gap-6">
+                                                        <div className="w-16 h-16 bg-white/10 rounded-[1.5rem] flex items-center justify-center border border-white/10 shadow-inner">
+                                                            <Train className="w-8 h-8 text-primary" />
+                                                        </div>
+                                                        <div>
+                                                            <h3 className="text-2xl font-black text-white italic tracking-tighter uppercase leading-none mb-1">{train.name}</h3>
+                                                            <div className="flex items-center gap-3">
+                                                                <span className="text-[10px] font-black text-primary uppercase tracking-[0.3em]">#{train.number}</span>
+                                                                <span className="w-1 h-1 rounded-full bg-white/20"></span>
+                                                                <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">{train.type} CLASS</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div className={`px-5 py-2 rounded-full border text-[10px] font-black uppercase tracking-widest ${train.status === 'On Time' ? 'bg-emerald-500/10 border-emerald-500/40 text-emerald-400' : 'bg-red-500/10 border-red-500/40 text-red-400'}`}>
+                                                        {train.status === 'On Time' ? t.trains.onTime : t.trains.delayed}
+                                                    </div>
+                                                </div>
+                                                <div className="flex items-center justify-between gap-4">
+                                                    <div className="text-center lg:text-left">
+                                                        <p className="text-3xl font-black text-white italic tracking-tighter mb-1">{train.dep}</p>
+                                                        <p className="text-[11px] font-black text-gray-400 uppercase tracking-[0.2em] flex items-center gap-2">
+                                                            <MapPin className="w-3 h-3" /> {train.from}
+                                                        </p>
+                                                    </div>
+                                                    <div className="flex-1 flex flex-col items-center gap-2 px-10">
+                                                        <span className="text-[10px] font-black text-gray-500 uppercase tracking-widest">{train.duration}</span>
+                                                        <div className="w-full h-[2px] bg-white/10 rounded-full relative">
+                                                            <div className="absolute top-1/2 left-0 -translate-y-1/2 w-4 h-4 bg-teal-500 rounded-full border-4 border-slate-900 shadow-xl shadow-teal-500/50"></div>
+                                                            <div className="absolute top-1/2 right-0 -translate-y-1/2 w-4 h-4 bg-primary rounded-full border-4 border-slate-900 shadow-xl shadow-primary/50"></div>
+                                                        </div>
+                                                        <ArrowRight className="w-4 h-4 text-white/20" />
+                                                    </div>
+                                                    <div className="text-center lg:text-right">
+                                                        <p className="text-3xl font-black text-white italic tracking-tighter mb-1">{train.arr}</p>
+                                                        <p className="text-[11px] font-black text-gray-400 uppercase tracking-[0.2em] flex items-center justify-end gap-2">
+                                                            {train.to} <MapPin className="w-3 h-3" />
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                                <div className="flex items-center gap-6 pt-4 border-t border-white/5">
+                                                    <div className="flex items-center gap-2">
+                                                        <div className="w-2 h-2 rounded-full bg-emerald-500"></div>
+                                                        <span className="text-[10px] font-black text-emerald-400 uppercase tracking-widest">{train.seats} {t.trains.seatsLeft}</span>
+                                                    </div>
+                                                    <div className="flex items-center gap-2">
+                                                        <div className="w-2 h-2 rounded-full bg-white/20"></div>
+                                                        <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest">{t.trains.pantry}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div className="w-full lg:w-48 lg:border-l border-white/10 lg:pl-10 space-y-6 flex flex-row lg:flex-col items-center justify-between lg:justify-center">
+                                                <div className="text-center">
+                                                    <p className="text-4xl font-black text-white italic tracking-tighter leading-none mb-1">₹{train.price}</p>
+                                                    <p className="text-[9px] font-black text-gray-500 uppercase tracking-[0.2em]">{t.trains.inclusiveTaxes}</p>
+                                                </div>
+                                                <button className="px-10 py-5 bg-primary hover:bg-emerald-600 text-white rounded-[1.5rem] font-black uppercase tracking-[0.3em] text-[11px] shadow-2xl shadow-primary/30 transition-all active:scale-95 flex-1 lg:w-full">
+                                                    {t.trains.bookNow}
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </motion.div>
+                                ))}
+                            </motion.div>
+                        ) : (
+                            <motion.div
+                                key="flights"
+                                initial={{ opacity: 0, y: 20 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                className="text-center py-40 bg-white/5 backdrop-blur-xl rounded-[4rem] border border-white/10 shadow-2xl"
+                            >
+                                <div className="w-32 h-32 bg-white/5 rounded-[2.5rem] flex items-center justify-center mx-auto mb-10 border border-white/5">
+                                    <Plane className="w-16 h-16 text-white/20 -rotate-12" />
+                                </div>
+                                <h3 className="text-4xl font-black text-white italic uppercase tracking-tighter mb-4">{t.trains.noFlights}</h3>
+                                <p className="text-gray-400 font-medium max-w-sm mx-auto leading-relaxed italic">{t.trains.noFlightsDesc}</p>
+                            </motion.div>
+                        )}
+                    </AnimatePresence>
+                </div>
             </div>
         </Layout>
     );

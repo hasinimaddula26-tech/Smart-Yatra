@@ -73,7 +73,7 @@ export default function Footer() {
                 </div>
 
                 <div className="border-t border-gray-100 pt-8 flex flex-col md:flex-row justify-between items-center text-xs text-gray-400">
-                    <p>&copy; Smart Yatra. Making transportation smarter for everyone.</p>
+                    <p>&copy; {new Date().getFullYear()} Smart Yatra. Making transportation smarter for everyone.</p>
                     <p>made by SmartYatrians</p>
                 </div>
             </div>

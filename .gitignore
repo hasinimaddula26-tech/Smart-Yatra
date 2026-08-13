@@ -6,6 +6,7 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
+*_log.txt
 
 node_modules
 dist
@@ -23,3 +24,16 @@ dist-ssr
 *.sln
 *.sw?
 .env
+
+# Python Virtual Environment
+venv/
+.venv/
+
+# Python / CV Models and media
+*.mp4
+*.caffemodel
+MobileNetSSD_deploy.caffemodel.html
+MobileNetSSD_deploy.caffemodel_files/
+yolov8n.onnx/
+yolov8n.onnx
+

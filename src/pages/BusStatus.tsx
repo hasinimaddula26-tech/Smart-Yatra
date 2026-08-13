@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react';
 import Layout from '../components/Layout';
-import { Wifi, Activity, ArrowRight, ArrowLeft, Zap, Server, Database, CheckCircle, Smartphone, Signal } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Wifi, Activity, ArrowRight, ArrowLeft, Zap, Server, CheckCircle, Signal } from 'lucide-react';
+import { useLanguage } from '../contexts/LanguageContext';
 
 export default function BusStatus() {
+    const { t } = useLanguage();
     // Simulation State
     const [passengers, setPassengers] = useState(38);
     const capacity = 50;
@@ -44,19 +45,19 @@ export default function BusStatus() {
                     <div>
                         <h1 className="text-2xl font-extrabold text-gray-900 flex items-center">
                             <span className="bg-primary/10 text-primary p-2 rounded-lg mr-3"><Wifi className="w-6 h-6" /></span>
-                            IoT Smart Sensor System
+                            {t.iotStatus.title}
                         </h1>
-                        <p className="text-gray-500 text-sm mt-1 ml-14">Real-time passenger detection & analytics</p>
+                        <p className="text-gray-500 text-sm mt-1 ml-14">{t.iotStatus.subtitle}</p>
                     </div>
                     <div className="flex items-center gap-6 mt-4 md:mt-0">
                         <div className="text-right">
-                            <p className="text-xs font-bold text-gray-400 uppercase tracking-widest">Data Transmission</p>
+                            <p className="text-xs font-bold text-gray-400 uppercase tracking-widest">{t.iotStatus.transmission}</p>
                             <div className="flex items-center justify-end text-primary font-bold">
                                 <Signal className="w-4 h-4 mr-1 animate-pulse" /> 4G LTE
                             </div>
                         </div>
                         <div className="bg-green-100 text-green-700 px-4 py-2 rounded-xl font-bold border border-green-200 flex items-center">
-                            <div className="w-2 h-2 rounded-full bg-green-600 mr-2 animate-pulse"></div> Online
+                            <div className="w-2 h-2 rounded-full bg-green-600 mr-2 animate-pulse"></div> {t.iotStatus.online}
                         </div>
                     </div>
                 </div>
@@ -70,32 +71,32 @@ export default function BusStatus() {
                                     <div className="h-10 w-1 bg-green-500 rounded-full"></div>
                                 </div>
                                 <div>
-                                    <h3 className="font-bold text-gray-900">Front Door</h3>
+                                    <h3 className="font-bold text-gray-900">{t.iotStatus.frontDoor}</h3>
                                     <p className="text-xs text-green-600 font-bold flex items-center">
-                                        <Activity className="w-3 h-3 mr-1" /> IR Beam Active
+                                        <Activity className="w-3 h-3 mr-1" /> {t.iotStatus.irActive}
                                     </p>
-                                    {entryActive && <span className="text-xs font-bold text-primary animate-bounce absolute mt-1">+1 Boarding</span>}
+                                    {entryActive && <span className="text-xs font-bold text-primary animate-bounce absolute mt-1">+1 {t.iotStatus.boarding}</span>}
                                 </div>
                             </div>
 
                             <div className="flex flex-col items-center">
                                 <div className="bg-gray-50 rounded-3xl px-12 py-6 border border-gray-100 text-center relative z-10">
                                     <div className="text-6xl font-black text-gray-900">{passengers}</div>
-                                    <div className="text-sm font-bold text-gray-400 mt-1">/ {capacity} seats</div>
+                                    <div className="text-sm font-bold text-gray-400 mt-1">/ {capacity} {t.iotStatus.seats}</div>
                                 </div>
                                 <div className="w-px h-10 bg-gray-200 -mt-2"></div>
                                 <div className="bg-primary text-white px-4 py-1 rounded-full text-xs font-bold shadow-lg shadow-primary/30 z-20">
-                                    <Zap className="w-3 h-3 inline mr-1" /> Live Sync
+                                    <Zap className="w-3 h-3 inline mr-1" /> {t.iotStatus.liveSync}
                                 </div>
                             </div>
 
                             <div className="flex items-center gap-4 text-right">
                                 <div>
-                                    <h3 className="font-bold text-gray-900">Rear Door</h3>
+                                    <h3 className="font-bold text-gray-900">{t.iotStatus.rearDoor}</h3>
                                     <p className="text-xs text-green-600 font-bold flex items-center justify-end">
-                                        <Activity className="w-3 h-3 mr-1" /> IR Beam Active
+                                        <Activity className="w-3 h-3 mr-1" /> {t.iotStatus.irActive}
                                     </p>
-                                    {exitActive && <span className="text-xs font-bold text-red-500 animate-bounce absolute mt-1 right-0">-1 Exiting</span>}
+                                    {exitActive && <span className="text-xs font-bold text-red-500 animate-bounce absolute mt-1 right-0">-1 {t.iotStatus.exiting}</span>}
                                 </div>
                                 <div className="bg-amber-50 p-3 rounded-xl">
                                     <div className="h-10 w-1 bg-amber-500 rounded-full"></div>
@@ -111,30 +112,30 @@ export default function BusStatus() {
                             ></div>
                         </div>
                         <div className="flex justify-between text-xs font-bold text-gray-400 uppercase tracking-wider">
-                            <span>Comfortable</span>
-                            <span>Nearly Full</span>
-                            <span>Overcrowded</span>
+                            <span>{t.iotStatus.comfortable}</span>
+                            <span>{t.iotStatus.nearlyFull}</span>
+                            <span>{t.iotStatus.overcrowded}</span>
                         </div>
 
                         {/* Stats Strip */}
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-8">
                             <div className="bg-green-50 rounded-xl p-4 border border-green-100 flex items-center justify-between">
                                 <div>
-                                    <p className="text-xs font-bold text-green-800 uppercase">Passenger Boarding</p>
-                                    <p className="text-xs text-green-600">Entry Sensor Count</p>
+                                    <p className="text-xs font-bold text-green-800 uppercase">{t.iotStatus.boardingStats}</p>
+                                    <p className="text-xs text-green-600">{t.iotStatus.entrySensor} Count</p>
                                 </div>
                                 <div className="text-2xl font-black text-green-700">+{boarded}</div>
                             </div>
                             <div className="bg-yellow-50 rounded-xl p-4 border border-yellow-100 flex items-center justify-between">
                                 <div>
-                                    <p className="text-xs font-bold text-yellow-800 uppercase">Passenger Exiting</p>
-                                    <p className="text-xs text-yellow-600">Exit Sensor Count</p>
+                                    <p className="text-xs font-bold text-yellow-800 uppercase">{t.iotStatus.exitingStats}</p>
+                                    <p className="text-xs text-yellow-600">{t.iotStatus.exitSensor} Count</p>
                                 </div>
                                 <div className="text-2xl font-black text-yellow-700">-{exited}</div>
                             </div>
                             <div className="bg-blue-50 rounded-xl p-4 border border-blue-100 flex items-center justify-between">
                                 <div>
-                                    <p className="text-xs font-bold text-blue-800 uppercase">Bus Capacity</p>
+                                    <p className="text-xs font-bold text-blue-800 uppercase">{t.iotStatus.busCapacity}</p>
                                     <p className="text-xs text-blue-600">{Math.round((passengers / capacity) * 100)}% Full</p>
                                 </div>
                                 <div className="text-2xl font-black text-blue-700">{capacity}</div>
@@ -163,7 +164,7 @@ export default function BusStatus() {
                             <div className={`w-2 h-2 rounded-full bg-green-500 absolute transition-all duration-300 ${entryActive ? 'left-1/2 scale-150' : 'left-0'}`}></div>
                         </div>
                         <div className="flex justify-between items-end">
-                            <p className="text-sm text-gray-500">Today's Count</p>
+                            <p className="text-sm text-gray-500">{t.iotStatus.todayCount}</p>
                             <p className="text-2xl font-bold text-green-600">+{boarded}</p>
                         </div>
                     </div>
@@ -178,7 +179,7 @@ export default function BusStatus() {
                             <Server className="w-8 h-8 text-primary" />
                             <div className="absolute -top-1 -right-1 w-3 h-3 bg-green-500 rounded-full border-2 border-white"></div>
                         </div>
-                        <p className="text-xs font-bold text-gray-400">Latency</p>
+                        <p className="text-xs font-bold text-gray-400">{t.iotStatus.latency}</p>
                         <p className="text-xl font-bold text-gray-900">36ms</p>
                     </div>
 
@@ -209,12 +210,12 @@ export default function BusStatus() {
                 {/* SEAT MAP (Screenshot 3) */}
                 <div className="bg-white rounded-3xl shadow-card border border-gray-100 p-8">
                     <h3 className="font-bold text-gray-900 mb-6 flex items-center">
-                        <CheckCircle className="w-5 h-5 mr-2 text-primary" /> Real-time Seat Map
+                        <CheckCircle className="w-5 h-5 mr-2 text-primary" /> {t.iotStatus.seatMap}
                     </h3>
 
                     <div className="flex justify-end gap-6 mb-4 text-xs font-bold">
-                        <div className="flex items-center"><div className="w-4 h-4 rounded bg-gray-100 mr-2"></div> Empty</div>
-                        <div className="flex items-center"><div className="w-4 h-4 rounded bg-primary mr-2"></div> Occupied</div>
+                        <div className="flex items-center"><div className="w-4 h-4 rounded bg-gray-100 mr-2"></div> {t.iotStatus.empty}</div>
+                        <div className="flex items-center"><div className="w-4 h-4 rounded bg-primary mr-2"></div> {t.iotStatus.occupied}</div>
                     </div>
 
                     <div className="grid grid-cols-5 md:grid-cols-10 gap-3">
